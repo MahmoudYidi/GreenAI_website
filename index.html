@@ -10,13 +10,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --emerald: #10b981;
-            --emerald-dark: #059669;
+            --emerald: #047857;
+            --emerald-dark: #064e3b;
             --emerald-light: #d1fae5;
+            --emerald-gradient: linear-gradient(135deg, #047857 0%, #064e3b 100%);
             --dark: #0f172a;
             --light: #f8fafc;
             --gray: #94a3b8;
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-emerald: 0 10px 15px -3px rgba(5, 150, 105, 0.3), 0 4px 6px -2px rgba(5, 150, 105, 0.1);
         }
 
         * {
@@ -50,6 +53,21 @@
             box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
         }
 
+        /* 3D Card effect */
+        .card-3d {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .card-3d-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .card-3d:hover .card-3d-inner {
+            transform: rotateY(10deg) rotateX(5deg) translateY(-10px);
+        }
+
         /* Header - Sticky with fade-in */
         header {
             position: fixed;
@@ -62,12 +80,13 @@
             align-items: center;
             z-index: 1000;
             transition: var(--transition);
+            background: var(--emerald-gradient);
         }
 
         header.scrolled {
             padding: 1rem 5%;
-            background: rgba(255, 255, 255, 0.96);
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
+            background: var(--emerald-gradient);
+            box-shadow: var(--shadow-lg);
         }
 
         .logo {
@@ -84,10 +103,8 @@
         .logo-text {
             font-size: 1.75rem;
             font-weight: 700;
-            background: linear-gradient(90deg, var(--emerald), #34d399);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         nav ul {
@@ -97,12 +114,13 @@
         }
 
         nav a {
-            color: var(--dark);
+            color: white;
             text-decoration: none;
             font-weight: 500;
             font-size: 1.05rem;
             position: relative;
             transition: var(--transition);
+            opacity: 0.9;
         }
 
         nav a::after {
@@ -112,7 +130,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: var(--emerald);
+            background: white;
             transition: var(--transition);
         }
 
@@ -121,20 +139,23 @@
         }
 
         nav a.active {
-            color: var(--emerald);
+            opacity: 1;
+            font-weight: 600;
         }
 
         .nav-cta {
-            background: var(--emerald);
-            color: white !important;
+            background: white;
+            color: var(--emerald-dark) !important;
             padding: 0.6rem 1.5rem;
             border-radius: 50px;
             margin-left: 1rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-emerald);
         }
 
         .nav-cta:hover {
-            background: var(--emerald-dark);
             transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
         }
 
         .nav-cta::after {
@@ -145,6 +166,7 @@
             display: none;
             font-size: 1.5rem;
             cursor: pointer;
+            color: white;
         }
 
         /* Hero Section - Fullscreen with dynamic background */
@@ -176,7 +198,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, rgba(16, 185, 129, 0.6) 0%, rgba(5, 150, 105, 0.4) 100%);
+            background: linear-gradient(90deg, rgba(4, 120, 87, 0.8) 0%, rgba(6, 78, 59, 0.7) 100%);
             z-index: -1;
         }
 
@@ -191,7 +213,7 @@
             line-height: 1.2;
             color: white;
             margin-bottom: 1.5rem;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .hero p {
@@ -260,6 +282,20 @@
             font-weight: 700;
             color: var(--dark);
             margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--emerald);
+            border-radius: 2px;
         }
 
         .section-title p {
@@ -269,23 +305,42 @@
             font-size: 1.1rem;
         }
 
-        /* Modern card design */
+        /* Modern card design with 3D effect */
         .card {
             background: white;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow-lg);
             transition: var(--transition);
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--emerald-gradient);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
         }
 
         .card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.15);
+            box-shadow: 0 15px 40px rgba(4, 120, 87, 0.25);
+        }
+
+        .card:hover::before {
+            opacity: 0.05;
         }
 
         .card-img {
             height: 220px;
             overflow: hidden;
+            position: relative;
         }
 
         .card-img img {
@@ -301,6 +356,8 @@
 
         .card-content {
             padding: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .card h3 {
@@ -353,7 +410,7 @@
             right: -100px;
             width: 300px;
             height: 300px;
-            background: rgba(16, 185, 129, 0.1);
+            background: rgba(4, 120, 87, 0.1);
             border-radius: 50%;
             z-index: 0;
         }
@@ -365,7 +422,7 @@
             left: -150px;
             width: 400px;
             height: 400px;
-            background: rgba(16, 185, 129, 0.05);
+            background: rgba(4, 120, 87, 0.05);
             border-radius: 50%;
             z-index: 0;
         }
@@ -380,12 +437,24 @@
 
         .stat-item {
             text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
         .stat-item h3 {
             font-size: 3.5rem;
             font-weight: 700;
-            color: var(--emerald);
+            color: var(--emerald-light);
             margin-bottom: 0.5rem;
             line-height: 1;
         }
@@ -400,9 +469,24 @@
             background: white;
             border-radius: 16px;
             padding: 3rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow-lg);
             max-width: 800px;
             margin: 0 auto;
+            background: var(--emerald-gradient);
+            color: white;
+        }
+
+        .contact-form .section-title h2,
+        .contact-form .section-title p {
+            color: white;
+        }
+
+        .contact-form .section-title h2::after {
+            background: white;
+        }
+
+        .contact-form .section-title p {
+            opacity: 0.9;
         }
 
         .form-group {
@@ -413,7 +497,7 @@
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
-            color: var(--dark);
+            color: white;
         }
 
         .form-group input,
@@ -421,18 +505,26 @@
         .form-group select {
             width: 100%;
             padding: 1rem;
-            border: 1px solid #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 8px;
             font-size: 1rem;
             transition: var(--transition);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
-            border-color: var(--emerald);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+            border-color: white;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .form-group textarea {
@@ -441,8 +533,8 @@
         }
 
         .submit-btn {
-            background: var(--emerald);
-            color: white;
+            background: white;
+            color: var(--emerald-dark);
             border: none;
             padding: 1rem 2.5rem;
             font-size: 1rem;
@@ -451,12 +543,12 @@
             cursor: pointer;
             transition: var(--transition);
             width: 100%;
+            box-shadow: var(--shadow-emerald);
         }
 
         .submit-btn:hover {
-            background: var(--emerald-dark);
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 15px 25px rgba(255, 255, 255, 0.3);
         }
 
         /* Footer - Sleek dark design */
@@ -464,6 +556,20 @@
             background: var(--dark);
             color: white;
             padding: 5rem 5% 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(4, 120, 87, 0.05);
+            border-radius: 50%;
+            z-index: 0;
         }
 
         .footer-grid {
@@ -471,6 +577,8 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 3rem;
             margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
         }
 
         .footer-col h3 {
@@ -502,11 +610,19 @@
             color: var(--gray);
             text-decoration: none;
             transition: var(--transition);
+            display: flex;
+            align-items: center;
         }
 
         .footer-links a:hover {
             color: white;
             padding-left: 5px;
+        }
+
+        .footer-links a i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
         }
 
         .social-links {
@@ -538,6 +654,8 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--gray);
             font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
         }
 
         /* Animations */
@@ -560,13 +678,14 @@
                 left: -100%;
                 width: 80%;
                 height: calc(100vh - 90px);
-                background: white;
+                background: var(--emerald-dark);
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
                 gap: 2rem;
                 transition: var(--transition);
-                box-shadow: 5px 0 20px rgba(0, 0, 0, 0.1);
+                box-shadow: 5px 0 20px rgba(0, 0, 0, 0.2);
+                z-index: 999;
             }
 
             nav ul.active {
@@ -608,6 +727,10 @@
             .section-title h2 {
                 font-size: 2rem;
             }
+
+            .contact-form {
+                padding: 2rem;
+            }
         }
     </style>
 </head>
@@ -615,7 +738,7 @@
     <!-- Header -->
     <header id="header">
         <div class="logo">
-            <img src="logo3.png" alt="GreenAI" class="logo-img">
+            <img src=logo3.png alt="GreenAI" class="logo-img">
         </div>
         <nav>
             <ul id="nav-menu">
@@ -623,7 +746,7 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#solutions">Solutions</a></li>
                 <li><a href="#contact">Contact</a></li>
-                <li><a href="YOUR_DASHBOARD_URL" class="nav-cta" target="_blank">Dashboard <i class="fas fa-external-link-alt"></i></a></li>
+                <li><a href="YOUR_DASHBOARD_URL" class="nav-cta" target="https://model-dashboard.onrender.com">Dashboard <i class="fas fa-external-link-alt"></i></a></li>
             </ul>
             <div class="mobile-menu" id="mobile-menu">
                 <i class="fas fa-bars"></i>
@@ -633,14 +756,14 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <!-- Replace with your custom background image -->
-        <img src="background.png" alt="Greenhouse" class="hero-bg" id="hero-bg">
+        <!-- Glass greenhouse background image -->
+        <img src="background.png" alt="Glass Greenhouse" class="hero-bg" id="hero-bg">
         <div class="hero-content">
             <h1>Revolutionizing Agriculture with AI-Powered Greenhouses</h1>
             <p>Harness the power of artificial intelligence to optimize your greenhouse operations, increase yields, and reduce environmental impact with our cutting-edge solutions.</p>
             <div class="btn-group">
                 <a href="#contact" class="btn btn-primary">Get Started <i class="fas fa-arrow-right"></i></a>
-                <a href="YOUR_DASHBOARD_URL" class="btn btn-secondary" target="_blank">View Dashboard <i class="fas fa-tachometer-alt"></i></a>
+                <a href="YOUR_DASHBOARD_URL" class="btn btn-secondary" target="https://model-dashboard.onrender.com">View Dashboard <i class="fas fa-tachometer-alt"></i></a>
             </div>
         </div>
     </section>
@@ -653,34 +776,42 @@
         </div>
         <div class="container">
             <div class="about-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
-                <div class="card floating" style="animation-delay: 0.1s;">
-                    <div class="card-img">
-                        <img src="https://images.unsplash.com/photo-1551651658-4c0c8b51d6ad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="AI Technology">
-                    </div>
-                    <div class="card-content">
-                        <h3>AI-Driven Optimization</h3>
-                        <p>Our proprietary algorithms analyze thousands of data points to create perfect growing conditions for each crop variety.</p>
-                        <a href="#" class="card-link">Learn more <i class="fas fa-chevron-right"></i></a>
-                    </div>
-                </div>
-                <div class="card floating" style="animation-delay: 0.2s;">
-                    <div class="card-img">
-                        <img src="https://images.unsplash.com/photo-1560493676-04071c5f467b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Sustainability">
-                    </div>
-                    <div class="card-content">
-                        <h3>Sustainable Practices</h3>
-                        <p>Reduce water usage by up to 70% and energy consumption by 40% while increasing yields by 30-50%.</p>
-                        <a href="#" class="card-link">Learn more <i class="fas fa-chevron-right"></i></a>
+                <div class="card floating card-3d" style="animation-delay: 0.1s;">
+                    <div class="card-3d-inner">
+                        <div class="card-img">
+                            <!-- Glass house image for AI optimization -->
+                            <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80" alt="AI in Glass Greenhouse">
+                        </div>
+                        <div class="card-content">
+                            <h3>AI-Driven Optimization</h3>
+                            <p>Our proprietary algorithms analyze thousands of data points to create perfect growing conditions for each crop variety in glass greenhouse environments.</p>
+                            <a href="#" class="card-link">Learn more <i class="fas fa-chevron-right"></i></a>
+                        </div>
                     </div>
                 </div>
-                <div class="card floating" style="animation-delay: 0.3s;">
-                    <div class="card-img">
-                        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Real-time Monitoring">
+                <div class="card floating card-3d" style="animation-delay: 0.2s;">
+                    <div class="card-3d-inner">
+                        <div class="card-img">
+                            <img src="https://images.unsplash.com/photo-1560493676-04071c5f467b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Sustainability">
+                        </div>
+                        <div class="card-content">
+                            <h3>Sustainable Practices</h3>
+                            <p>Reduce water usage by up to 70% and energy consumption by 40% while increasing yields by 30-50% in controlled glass environments.</p>
+                            <a href="#" class="card-link">Learn more <i class="fas fa-chevron-right"></i></a>
+                        </div>
                     </div>
-                    <div class="card-content">
-                        <h3>Real-time Monitoring</h3>
-                        <p>24/7 surveillance of plant health with computer vision that detects diseases before they spread.</p>
-                        <a href="#" class="card-link">Learn more <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="card floating card-3d" style="animation-delay: 0.3s;">
+                    <div class="card-3d-inner">
+                        <div class="card-img">
+                            <!-- Glass house monitoring image -->
+                            <img src="https://images.unsplash.com/photo-1591035897819-f4bdf739f446?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Glass House Monitoring">
+                        </div>
+                        <div class="card-content">
+                            <h3>Real-time Monitoring</h3>
+                            <p>24/7 surveillance of plant health in glass greenhouses with computer vision that detects diseases before they spread.</p>
+                            <a href="#" class="card-link">Learn more <i class="fas fa-chevron-right"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -691,7 +822,7 @@
     <section class="stats">
         <div class="section-title">
             <h2 style="color: white;">Our Impact in Numbers</h2>
-            <p style="color: rgba(255,255,255,0.8);">Quantifiable results from farms using GreenAI technology</p>
+            <p style="color: rgba(255,255,255,0.8);">Quantifiable results from glass greenhouses using GreenAI technology</p>
         </div>
         <div class="stats-grid">
             <div class="stat-item">
@@ -717,35 +848,41 @@
     <section class="section" id="solutions" style="background: var(--emerald-light);">
         <div class="section-title">
             <h2>Comprehensive AI Solutions</h2>
-            <p>End-to-end greenhouse intelligence for modern agriculture</p>
+            <p>End-to-end greenhouse intelligence for modern glasshouse agriculture</p>
         </div>
         <div class="container">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                <div class="card">
-                    <div class="card-content">
-                        <div style="background: var(--emerald); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-                            <i class="fas fa-thermometer-half" style="color: white; font-size: 1.25rem;"></i>
+                <div class="card card-3d">
+                    <div class="card-3d-inner">
+                        <div class="card-content">
+                            <div style="background: var(--emerald-gradient); width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; box-shadow: var(--shadow-emerald);">
+                                <i class="fas fa-thermometer-half" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <h3>Climate Control</h3>
+                            <p>AI-optimized temperature, humidity, and CO2 levels tailored to each crop's needs throughout its growth cycle in glass structures.</p>
                         </div>
-                        <h3>Climate Control</h3>
-                        <p>AI-optimized temperature, humidity, and CO2 levels tailored to each crop's needs throughout its growth cycle.</p>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-content">
-                        <div style="background: var(--emerald); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-                            <i class="fas fa-tint" style="color: white; font-size: 1.25rem;"></i>
+                <div class="card card-3d">
+                    <div class="card-3d-inner">
+                        <div class="card-content">
+                            <div style="background: var(--emerald-gradient); width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; box-shadow: var(--shadow-emerald);">
+                                <i class="fas fa-tint" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <h3>Precision Irrigation</h3>
+                            <p>Machine learning determines exact water and nutrient requirements for glasshouse crops, eliminating waste and overwatering.</p>
                         </div>
-                        <h3>Precision Irrigation</h3>
-                        <p>Machine learning determines exact water and nutrient requirements, eliminating waste and overwatering.</p>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-content">
-                        <div style="background: var(--emerald); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-                            <i class="fas fa-eye" style="color: white; font-size: 1.25rem;"></i>
+                <div class="card card-3d">
+                    <div class="card-3d-inner">
+                        <div class="card-content">
+                            <div style="background: var(--emerald-gradient); width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; box-shadow: var(--shadow-emerald);">
+                                <i class="fas fa-eye" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <h3>Crop Vision</h3>
+                            <p>Computer vision monitors plant health in glass environments, detects diseases early, and predicts harvest times with 95% accuracy.</p>
                         </div>
-                        <h3>Crop Vision</h3>
-                        <p>Computer vision monitors plant health, detects diseases early, and predicts harvest times with 95% accuracy.</p>
                     </div>
                 </div>
             </div>
@@ -756,27 +893,27 @@
     <section class="section" id="contact">
         <div class="section-title">
             <h2>Ready to Transform Your Greenhouse?</h2>
-            <p>Contact our team for a personalized consultation</p>
+            <p>Contact our team for a personalized consultation about our glasshouse solutions</p>
         </div>
         <div class="contact-form">
-            <form>
+            <form id="contactForm">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
                     <div class="form-group">
                         <label for="name">Full Name</label>
-                        <input type="text" id="name" required>
+                        <input type="text" id="name" placeholder="Your name" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" required>
+                        <input type="email" id="email" placeholder="Your email" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="subject">Subject</label>
-                    <input type="text" id="subject" required>
+                    <input type="text" id="subject" placeholder="Subject" required>
                 </div>
                 <div class="form-group">
                     <label for="message">Your Message</label>
-                    <textarea id="message" required></textarea>
+                    <textarea id="message" placeholder="Tell us about your greenhouse project" required></textarea>
                 </div>
                 <button type="submit" class="submit-btn">Send Message <i class="fas fa-paper-plane"></i></button>
             </form>
@@ -788,10 +925,9 @@
         <div class="footer-grid">
             <div class="footer-col">
                 <div class="logo" style="margin-bottom: 1.5rem;">
-                    <img src="logo3.png" alt="GreenAI" class="logo-img" style="height: 30px;">
-                    <span class="logo-text" style="font-size: 1.5rem;">GreenAI</span>
+                    <img src=logo3.png alt="GreenAI" class="logo-img" style="height: 30px;">
                 </div>
-                <p style="color: var(--gray); margin-bottom: 1.5rem; line-height: 1.6;">Harnessing artificial intelligence to create sustainable and efficient greenhouse solutions for the future of agriculture.</p>
+                <p style="color: var(--gray); margin-bottom: 1.5rem; line-height: 1.6;">Harnessing artificial intelligence to create sustainable and efficient glass greenhouse solutions for the future of agriculture.</p>
                 <div class="social-links">
                     <a href="#"><i class="fab fa-twitter"></i></a>
                     <a href="#"><i class="fab fa-linkedin-in"></i></a>
@@ -822,10 +958,10 @@
             <div class="footer-col">
                 <h3>Contact</h3>
                 <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-map-marker-alt" style="margin-right: 0.5rem;"></i> 123 Tech Park, Silicon Valley</a></li>
-                    <li><a href="#"><i class="fas fa-phone" style="margin-right: 0.5rem;"></i> +1 (555) 123-4567</a></li>
-                    <li><a href="#"><i class="fas fa-envelope" style="margin-right: 0.5rem;"></i> info@greenai.tech</a></li>
-                    <li><a href="YOUR_DASHBOARD_URL" target="_blank"><i class="fas fa-tachometer-alt" style="margin-right: 0.5rem;"></i> Client Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> 123 Tech Park, Silicon Valley</a></li>
+                    <li><a href="#"><i class="fas fa-phone"></i> +1 (555) 123-4567</a></li>
+                    <li><a href="#"><i class="fas fa-envelope"></i> info@greenai.tech</a></li>
+                    <li><a href="YOUR_DASHBOARD_URL" target="https://model-dashboard.onrender.com"><i class="fas fa-tachometer-alt"></i> Client Dashboard</a></li>
                 </ul>
             </div>
         </div>

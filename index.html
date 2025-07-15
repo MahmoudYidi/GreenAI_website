@@ -8,738 +8,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --emerald: #2E7D32;
-            --emerald-dark: #1B5E20;
-            --emerald-light: #C8E6C9;
-            --emerald-gradient: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
-            --dark: #0f172a;
-            --light: #f8fafc;
-            --gray: #94a3b8;
-            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --shadow-emerald: 0 10px 15px -3px rgba(46, 125, 50, 0.3), 0 4px 6px -2px rgba(46, 125, 50, 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        body {
-            background-color: var(--light);
-            color: var(--dark);
-            overflow-x: hidden;
-        }
-
-        /* Ultra-thin scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--emerald);
-            border-radius: 10px;
-        }
-
-        /* Premium glass morphism effect */
-        .glass {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-        }
-
-        /* 3D Card effect */
-        .card-3d {
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .card-3d-inner {
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-
-        .card-3d:hover .card-3d-inner {
-            transform: rotateY(10deg) rotateX(5deg) translateY(-10px);
-        }
-
-        /* Header - Sticky with fade-in */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 1.5rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            transition: var(--transition);
-            background: var(--emerald-gradient);
-        }
-
-        header.scrolled {
-            padding: 1rem 5%;
-            background: var(--emerald-gradient);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .logo-img {
-            height: 40px;
-            width: auto;
-        }
-
-        .logo-text {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        nav ul {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.05rem;
-            position: relative;
-            transition: var(--transition);
-            opacity: 0.9;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: white;
-            transition: var(--transition);
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        nav a.active {
-            opacity: 1;
-            font-weight: 600;
-        }
-
-        .nav-cta {
-            background: white;
-            color: var(--emerald-dark) !important;
-            padding: 0.6rem 1.5rem;
-            border-radius: 50px;
-            margin-left: 1rem;
-            font-weight: 600;
-            box-shadow: var(--shadow-emerald);
-        }
-
-        .nav-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
-        }
-
-        .nav-cta::after {
-            display: none;
-        }
-
-        .mobile-menu {
-            display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: white;
-        }
-
-        /* Hero Section - Fullscreen with dynamic background */
-        .hero {
-            height: 100vh;
-            width: 100%;
-            position: relative;
-            display: flex;
-            align-items: center;
-            padding: 0 5%;
-            overflow: hidden;
-        }
-
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-            transition: var(--transition);
-            opacity: 0.7;
-        }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(1800deg, rgba(46, 125, 50, 0.1) 0%, rgba(27, 94, 32, 0.55) 100%);
-            z-index: -1;
-        }
-
-        .hero-content {
-            max-width: 600px;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            line-height: 1.2;
-            color: white;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 2.5rem;
-            line-height: 1.6;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.9rem 2.2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .btn-primary {
-            background: white;
-            color: var(--emerald-dark);
-            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(255, 255, 255, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-            margin-left: 1rem;
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            color: var(--emerald-dark);
-        }
-
-        /* Animated floating elements */
-        .floating {
-            animation: floating 6s ease-in-out infinite;
-        }
-
-        @keyframes floating {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        /* Sections - Modern spacing and cards */
-        .section {
-            padding: 6rem 5%;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-title h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 1rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: var(--emerald);
-            border-radius: 2px;
-        }
-
-        .section-title p {
-            color: var(--gray);
-            max-width: 700px;
-            margin: 0 auto;
-            font-size: 1.1rem;
-        }
-
-        /* Modern card design with 3D effect */
-        .card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--shadow-lg);
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--emerald-gradient);
-            opacity: 0;
-            transition: var(--transition);
-            z-index: 0;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(46, 125, 50, 0.25);
-        }
-
-        .card:hover::before {
-            opacity: 0.05;
-        }
-
-        .card-img {
-            height: 220px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .card-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-
-        .card:hover .card-img img {
-            transform: scale(1.05);
-        }
-
-        .card-content {
-            padding: 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-
-        .card p {
-            color: var(--gray);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .card-link {
-            display: inline-flex;
-            align-items: center;
-            color: var(--emerald);
-            font-weight: 600;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .card-link i {
-            margin-left: 0.5rem;
-            transition: var(--transition);
-        }
-
-        .card-link:hover {
-            color: var(--emerald-dark);
-        }
-
-        .card-link:hover i {
-            transform: translateX(3px);
-        }
-
-        /* Stats section - Modern minimal design */
-        .stats {
-            background: var(--dark);
-            color: white;
-            padding: 5rem 5%;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stats::before {
-            content: '';
-            position: absolute;
-            top: -100px;
-            right: -100px;
-            width: 300px;
-            height: 300px;
-            background: rgba(46, 125, 50, 0.1);
-            border-radius: 50%;
-            z-index: 0;
-        }
-
-        .stats::after {
-            content: '';
-            position: absolute;
-            bottom: -150px;
-            left: -150px;
-            width: 400px;
-            height: 400px;
-            background: rgba(46, 125, 50, 0.05);
-            border-radius: 50%;
-            z-index: 0;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 3rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .stat-item {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: var(--transition);
-        }
-
-        .stat-item:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-item h3 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: var(--emerald-light);
-            margin-bottom: 0.5rem;
-            line-height: 1;
-        }
-
-        .stat-item p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        /* Contact form - Modern layout */
-        .contact-form {
-            background: white;
-            border-radius: 16px;
-            padding: 3rem;
-            box-shadow: var(--shadow-lg);
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--emerald-gradient);
-            color: white;
-        }
-
-        .contact-form .section-title h2,
-        .contact-form .section-title p {
-            color: white;
-        }
-
-        .contact-form .section-title h2::after {
-            background: white;
-        }
-
-        .contact-form .section-title p {
-            opacity: 0.9;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: white;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: var(--transition);
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: white;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .form-group textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .submit-btn {
-            background: white;
-            color: var(--emerald-dark);
-            border: none;
-            padding: 1rem 2.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-            width: 100%;
-            box-shadow: var(--shadow-emerald);
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(255, 255, 255, 0.3);
-        }
-
-        /* Footer - Sleek dark design */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 5rem 5% 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        footer::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 200px;
-            height: 200px;
-            background: rgba(46, 125, 50, 0.05);
-            border-radius: 50%;
-            z-index: 0;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 3rem;
-            margin-bottom: 3rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .footer-col h3 {
-            font-size: 1.25rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        .footer-col h3::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background: var(--emerald);
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 0.75rem;
-        }
-
-        .footer-links a {
-            color: var(--gray);
-            text-decoration: none;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-        }
-
-        .footer-links a:hover {
-            color: white;
-            padding-left: 5px;
-        }
-
-        .footer-links a i {
-            margin-right: 0.5rem;
-            width: 20px;
-            text-align: center;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .social-links a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50%;
-            color: white;
-            transition: var(--transition);
-        }
-
-        .social-links a:hover {
-            background: var(--emerald);
-            transform: translateY(-3px);
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--gray);
-            font-size: 0.9rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            nav ul {
-                position: fixed;
-                top: 90px;
-                left: -100%;
-                width: 80%;
-                height: calc(100vh - 90px);
-                background: var(--emerald-dark);
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 2rem;
-                transition: var(--transition);
-                box-shadow: 5px 0 20px rgba(0, 0, 0, 0.2);
-                z-index: 999;
-            }
-
-            nav ul.active {
-                left: 0;
-            }
-
-            .mobile-menu {
-                display: block;
-            }
-
-            .hero h1 {
-                font-size: 2.8rem;
-            }
-
-            .btn-group {
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .btn-secondary {
-                margin-left: 0;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .section {
-                padding: 4rem 5%;
-            }
-
-            .section-title h2 {
-                font-size: 2rem;
-            }
-
-            .contact-form {
-                padding: 2rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Header -->
     <header id="header">
         <div class="logo">
-            <img src=logo3.png alt="GreenAI" class="logo-img">
+            <img src="logo3.png" alt="GreenAI" class="logo-img">
         </div>
         <nav>
             <ul id="nav-menu">
@@ -758,10 +33,10 @@
     <!-- Hero Section -->
     <section class="hero" id="home">
         <!-- Glass greenhouse background image -->
-        <img src="background2.png" alt="Glass Greenhouse" class="hero-bg" id="hero-bg">
+        <img src="background5.png" alt="Glass Greenhouse" class="hero-bg" id="hero-bg">
         <div class="hero-content">
             <h1>Revolutionizing Agriculture with AI-Powered Greenhouses</h1>
-            <p>Harness the power of artificial intelligence to optimize your greenhouse operations, increase yields, and reduce environmental impact with our cutting-edge solutions.</p>
+            <p>Transform your greenhouse into a fully AI-driven ecosystem—maximize yields, minimize waste, and grow smarter.</p>
             <div class="btn-group">
                 <a href="#contact" class="btn btn-primary">Get Started <i class="fas fa-arrow-right"></i></a>
                 <a href="https://model-dashboard.onrender.com" class="btn btn-secondary" target="_blank">View Dashboard <i class="fas fa-tachometer-alt"></i></a>
@@ -772,11 +47,11 @@
     <!-- About Section -->
     <section class="section" id="about">
         <div class="section-title">
-            <h2>Precision Agriculture Redefined</h2>
-            <p>GreenAI combines advanced machine learning with IoT sensors to create the most intelligent greenhouse management system on the market.</p>
+            <h2>Reinventing Greenhouses with AI</h2>
+            <p>GreenAI turns your entire greenhouse into a self-optimizing, AI-driven system, combining machine learning and IoT for unmatched efficiency and yield.</p>
         </div>
         <div class="container">
-            <div class="about-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
+            <div class="about-grid">
                 <div class="card floating card-3d" style="animation-delay: 0.1s;">
                     <div class="card-3d-inner">
                         <div class="card-img">
@@ -797,7 +72,7 @@
                         </div>
                         <div class="card-content">
                             <h3>Sustainable Practices</h3>
-                            <p>Reduce water usage by up to 70% and energy consumption by 40% while increasing yields by 30-50% in controlled glass environments.</p>
+                            <p>Reduce water usage by up to X% and energy consumption by X% while increasing yields by X-Y% in controlled glass environments.</p>
                             <a href="#" class="card-link">Learn more <i class="fas fa-chevron-right"></i></a>
                         </div>
                     </div>
@@ -827,19 +102,19 @@
         </div>
         <div class="stats-grid">
             <div class="stat-item">
-                <h3>+50%</h3>
+                <h3>+N/A%</h3>
                 <p>Average Yield Increase</p>
             </div>
             <div class="stat-item">
-                <h3>70%</h3>
-                <p>Water Savings</p>
+                <h3>£N/A</h3>
+                <p>Savings</p>
             </div>
             <div class="stat-item">
                 <h3>24/7</h3>
                 <p>Automated Monitoring</p>
             </div>
             <div class="stat-item">
-                <h3>100+</h3>
+                <h3>N/A</h3>
                 <p>Satisfied Clients</p>
             </div>
         </div>
@@ -852,41 +127,88 @@
             <p>End-to-end greenhouse intelligence for modern glasshouse agriculture</p>
         </div>
         <div class="container">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+            <div class="solutions-grid">
                 <div class="card card-3d">
                     <div class="card-3d-inner">
                         <div class="card-content">
-                            <div style="background: var(--emerald-gradient); width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; box-shadow: var(--shadow-emerald);">
-                                <i class="fas fa-thermometer-half" style="color: white; font-size: 1.5rem;"></i>
+                            <div class="solution-icon">
+                                <i class="fas fa-eye"></i>
                             </div>
-                            <h3>Climate Control</h3>
-                            <p>AI-optimized temperature, humidity, and CO2 levels tailored to each crop's needs throughout its growth cycle in glass structures.</p>
+                            <h3>Green Vision</h3>
+                            <p>Our AI-powered vision stack monitors every plant in real time. Detecting diseases early, tracking growth stages, counting fruits, identifying pests, and spotting nutrient deficiencies. From canopy analysis to yield prediction, we turn your glasshouse into a fully autonomous growing environment.</p>
                         </div>
                     </div>
                 </div>
                 <div class="card card-3d">
                     <div class="card-3d-inner">
                         <div class="card-content">
-                            <div style="background: var(--emerald-gradient); width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; box-shadow: var(--shadow-emerald);">
-                                <i class="fas fa-tint" style="color: white; font-size: 1.5rem;"></i>
+                            <div class="solution-icon">
+                                <i class="fas fa-thermometer-half"></i>
                             </div>
-                            <h3>Precision Irrigation</h3>
-                            <p>Machine learning determines exact water and nutrient requirements for glasshouse crops, eliminating waste and overwatering.</p>
+                            <h3>Green Climate</h3>
+                            <p>Our AI dynamically adjusts temperature, humidity, and CO₂ based on each crop's needs—responding to plant health, growth stage, and ambient weather conditions to create the ideal microclimate at every moment.</p>
                         </div>
                     </div>
                 </div>
                 <div class="card card-3d">
                     <div class="card-3d-inner">
                         <div class="card-content">
-                            <div style="background: var(--emerald-gradient); width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; box-shadow: var(--shadow-emerald);">
-                                <i class="fas fa-eye" style="color: white; font-size: 1.5rem;"></i>
+                            <div class="solution-icon">
+                                <i class="fas fa-tint"></i>
                             </div>
-                            <h3>Crop Vision</h3>
-                            <p>Computer vision monitors plant health in glass environments, detects diseases early, and predicts harvest times with 95% accuracy.</p>
+                            <h3>Green Resources</h3>
+                            <p>Machine learning precisely calculates each crop's water, nutrient, and resource needs—eliminating waste, preventing overuse, and ensuring efficient, sustainable growing in every corner of the glasshouse.</p>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section class="news-section">
+        <div class="section-title">
+            <h2>Latest News & Updates</h2>
+            <p>Stay informed about the latest in AI-powered greenhouse technology</p>
+        </div>
+        <div class="news-container">
+            <div class="news-slider">
+                <div class="news-card">
+                    <div class="news-img">
+                        <img src="mockup.png" alt="AI in Agriculture">
+                    </div>
+                    <div class="news-content">
+                        <span class="news-date">June 15, 2025</span>
+                        <h3>GreenAI starts development of its first mobile application</h3>
+                        <p>Coming soon</p>
+                        <a href="#" class="news-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <div class="news-img">
+                        <img src="dashboard.png" alt="Greenhouse Tech">
+                    </div>
+                    <div class="news-content">
+                        <span class="news-date">July 05, 2025</span>
+                        <h3>Dashboard alpha release</h3>
+                        <p>GreenAI is testing a new dashboard release that allows users to track their greenhouse's performance in real-time.</p>
+                        <a href="#" class="news-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <div class="news-img">
+                        <img src="hardware.png" alt="Greenhouse Tech">
+                    </div>
+                    <div class="news-content">
+                        <span class="news-date">July 15, 2025</span>
+                        <h3>hardware Design</h3>
+                        <p>GreenAI to design its first hardware prototype</p>
+                        <a href="#" class="news-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <button class="news-prev"><i class="fas fa-chevron-left"></i></button>
+            <button class="news-next"><i class="fas fa-chevron-right"></i></button>
         </div>
     </section>
 
@@ -898,7 +220,7 @@
         </div>
         <div class="contact-form">
             <form id="contactForm">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="form-row">
                     <div class="form-group">
                         <label for="name">Full Name</label>
                         <input type="text" id="name" placeholder="Your name" required>
@@ -926,7 +248,7 @@
         <div class="footer-grid">
             <div class="footer-col">
                 <div class="logo" style="margin-bottom: 1.5rem;">
-                    <img src=logo3.png alt="GreenAI" class="logo-img" style="height: 30px;">
+                    <img src="logo3.png" alt="GreenAI" class="logo-img" style="height: 30px;">
                 </div>
                 <p style="color: var(--gray); margin-bottom: 1.5rem; line-height: 1.6;">Harnessing artificial intelligence to create sustainable and efficient glass greenhouse solutions for the future of agriculture.</p>
                 <div class="social-links">
@@ -959,8 +281,8 @@
             <div class="footer-col">
                 <h3>Contact</h3>
                 <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> 123 Tech Park, Silicon Valley</a></li>
-                    <li><a href="#"><i class="fas fa-phone"></i> +1 (555) 123-4567</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i>Sheffield</a></li>
+                    <li><a href="#"><i class="fas fa-phone"></i> +44 123 456 789</a></li>
                     <li><a href="#"><i class="fas fa-envelope"></i> info@greenai.tech</a></li>
                     <li><a href="https://model-dashboard.onrender.com" target="_blank"><i class="fas fa-tachometer-alt"></i> Client Dashboard</a></li>
                 </ul>
@@ -971,89 +293,6 @@
         </div>
     </footer>
 
-    <script>
-        // Mobile menu toggle
-        const mobileMenu = document.getElementById('mobile-menu');
-        const navMenu = document.getElementById('nav-menu');
-
-        mobileMenu.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            mobileMenu.innerHTML = navMenu.classList.contains('active') ? 
-                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-        });
-
-        // Header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            header.classList.toggle('scrolled', window.scrollY > 50);
-        });
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                if(this.getAttribute('href') === '#') return;
-                
-                const target = document.querySelector(this.getAttribute('href'));
-                if(target) {
-                    window.scrollTo({
-                        top: target.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                    
-                    // Close mobile menu if open
-                    if(navMenu.classList.contains('active')) {
-                        navMenu.classList.remove('active');
-                        mobileMenu.innerHTML = '<i class="fas fa-bars"></i>';
-                    }
-                }
-            });
-        });
-
-        // Hero background image upload functionality
-        const heroBg = document.getElementById('hero-bg');
-        
-        // This function would be triggered by your actual file upload UI
-        function updateHeroBackground(imageUrl) {
-            heroBg.src = imageUrl;
-        }
-        
-        // Example of how to implement an image upload (you'd need to create the UI)
-        // document.getElementById('bg-upload').addEventListener('change', function(e) {
-        //     const file = e.target.files[0];
-        //     if(file) {
-        //         const reader = new FileReader();
-        //         reader.onload = function(event) {
-        //             updateHeroBackground(event.target.result);
-        //         }
-        //         reader.readAsDataURL(file);
-        //     }
-        // });
-
-        // Set active navigation link based on scroll position
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('nav a');
-
-        window.addEventListener('scroll', () => {
-            let current = '';
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                
-                if(pageYOffset >= (sectionTop - 150)) {
-                    current = section.getAttribute('id');
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if(link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
-                }
-            });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
